@@ -7,7 +7,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '2.2'; // add missing timeStartKey(); keep CSRF fix and all features
+        $this->version = '2.3'; // add missing timeStartKey(); keep CSRF fix and all features
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -599,6 +599,7 @@ class PsCombExport extends Module
     private function czMonthGenitive($slug)
     {
         $m = [
+            // Nominativ (1. pád)
             'leden'     => 'ledna',
             'unor'      => 'února',
             'brezen'    => 'března',
@@ -611,6 +612,20 @@ class PsCombExport extends Module
             'rijen'     => 'října',
             'listopad'  => 'listopadu',
             'prosinec'  => 'prosince',
+            // Genitiv (2. pád) - stejný výstup jako nominativ
+            'ledna'     => 'ledna',
+            'unora'     => 'února',
+            'brezna'    => 'března',
+            'dubna'     => 'dubna',
+            'kvetna'    => 'května',
+            'cervna'    => 'června',
+            'července'  => 'července',
+            'cervence'  => 'července',
+            'srpna'     => 'srpna',
+            'zari'      => 'září',
+            'rijna'     => 'října',
+            'listopadu' => 'listopadu',
+            'prosince'  => 'prosince',
         ];
         return isset($m[$slug]) ? $m[$slug] : '';
     }
@@ -619,8 +634,12 @@ class PsCombExport extends Module
     private function czMonthNumber($slug)
     {
         $m = [
+            // Nominativ (1. pád)
             'leden'=>1,'unor'=>2,'brezen'=>3,'duben'=>4,'kveten'=>5,'cerven'=>6,
-            'cervenec'=>7,'srpen'=>8,'zari'=>9,'rijen'=>10,'listopad'=>11,'prosinec'=>12
+            'cervenec'=>7,'srpen'=>8,'zari'=>9,'rijen'=>10,'listopad'=>11,'prosinec'=>12,
+            // Genitiv (2. pád)
+            'ledna'=>1,'unora'=>2,'brezna'=>3,'dubna'=>4,'kvetna'=>5,'cervna'=>6,
+            'července'=>7,'cervence'=>7,'srpna'=>8,'rijna'=>10,'listopadu'=>11,'prosince'=>12
         ];
         return isset($m[$slug]) ? (int)$m[$slug] : 0;
     }
