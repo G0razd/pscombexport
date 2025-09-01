@@ -24,7 +24,8 @@ PrestaShop modul pro export kombinací produktů do HTML tabulky s pokročilým 
 7. Po nahrání klikněte na **Konfigurovat**
 
 Podrobný návod: [INSTALL.md](INSTALL.md)  
-Česká dokumentace: [DOKUMENTACE.md](DOKUMENTACE.md)
+Česká dokumentace: [DOKUMENTACE.md](DOKUMENTACE.md)  
+Řešení problémů: [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 ## Použití
 

@@ -7,7 +7,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '2.3'; // add missing timeStartKey(); keep CSRF fix and all features
+        $this->version = '2.5'; // stock handling (strikethrough on cells)
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -181,6 +181,7 @@ class PsCombExport extends Module
                     'oddo'       => '',
                     'start_key'  => '',
                     'start_disp' => '',
+                    'quantity'   => (int)$c['quantity'],
                 ];
             }
             $groupSlug = $this->slugSimple($c['group_name']);
@@ -222,6 +223,7 @@ class PsCombExport extends Module
                 'den'    => $data['den'],
                 'oddo'   => $data['oddo'],
                 'link'   => $url,
+                'quantity' => $data['quantity'],
             ];
 
             $key = $data['start_key'] ?: '00000000';
@@ -288,16 +290,26 @@ class PsCombExport extends Module
         $html .= "</tr>\n";
 
         foreach ($rows as $r) {
+            $isOutOfStock = (isset($r['quantity']) && $r['quantity'] <= 0);
+            $cellStyle = $isOutOfStock ? ' style="text-decoration:line-through; color:#999"' : '';
+
             $html .= "<tr>\n";
-            $html .= '<td>'.htmlspecialchars((string)$r['cislo'])."</td>\n";
-            $html .= '<td>'.htmlspecialchars((string)$r['nazev'])."</td>\n";
-            $html .= '<td>'.htmlspecialchars((string)$r['den'])."</td>\n";
-            $html .= '<td>&nbsp;'.htmlspecialchars((string)$r['oddo'])."</td>\n";
-            $html .= "<td>&nbsp;</td>\n";
-            $html .= '<td><a href="'.htmlspecialchars($r['link']).'"><img src="'.
-                      htmlspecialchars($imgPath).'" alt="checkout" width="24" height="24" />'.
-                      htmlspecialchars($btnLabel)."</a></td>\n";
-            $html .= "<td>&nbsp;</td>\n";
+            $html .= '<td'.$cellStyle.'>'.htmlspecialchars((string)$r['cislo'])."</td>\n";
+            $html .= '<td'.$cellStyle.'>'.htmlspecialchars((string)$r['nazev'])."</td>\n";
+            $html .= '<td'.$cellStyle.'>'.htmlspecialchars((string)$r['den'])."</td>\n";
+            $html .= '<td'.$cellStyle.'>&nbsp;'.htmlspecialchars((string)$r['oddo'])."</td>\n";
+            $html .= '<td'.$cellStyle.'>&nbsp;</td>'."\n";
+
+            if ($isOutOfStock) {
+                $html .= '<td'.$cellStyle.'><img src="'.htmlspecialchars($imgPath).'" alt="checkout" width="24" height="24" style="opacity:0.5; filter:grayscale(100%)" /> '.
+                          htmlspecialchars($btnLabel)."</td>\n";
+            } else {
+                $html .= '<td><a href="'.htmlspecialchars($r['link']).'"><img src="'.
+                          htmlspecialchars($imgPath).'" alt="checkout" width="24" height="24" />'.
+                          htmlspecialchars($btnLabel)."</a></td>\n";
+            }
+
+            $html .= '<td'.$cellStyle.'>&nbsp;</td>'."\n";
             $html .= "</tr>\n";
         }
 

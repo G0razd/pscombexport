@@ -1,0 +1,16 @@
+{
+	"name": "pscombexport",
+	"version": "2.4.0",
+	"description": "PrestaShop module for combinations export",
+	"main": "pscombexport.php",
+	"scripts": {
+		"build": "node build.js"
+	},
+	"author": "Lukáš Gorazd Hrodek",
+	"license": "MIT",
+	"dependencies": {
+		"archiver": "^5.3.1",
+		"fs-extra": "^10.1.0"
+	},
+	"private": true
+}

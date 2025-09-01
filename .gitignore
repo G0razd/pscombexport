@@ -1,7 +1,13 @@
 # Release builds
 release/
 temp_build/
+build_tmp/
 *.zip
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
 
 # IDE
 .vscode/
@@ -15,4 +21,3 @@ desktop.ini
 
 # Logs
 *.log
-npm-debug.log*
