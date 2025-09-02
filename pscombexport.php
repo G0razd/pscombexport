@@ -7,7 +7,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '2.5'; // stock handling (strikethrough on cells)
+        $this->version = '2.6'; // stock handling (row-based strikethrough)
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -278,7 +278,7 @@ class PsCombExport extends Module
         $id = 'termin-'.$sectionIndex;
         $html  = '<section id="'.htmlspecialchars($id).'">'."\n";
         $html .= '<h2 style="margin:10px 0">'.htmlspecialchars($heading).'</h2>'."\n";
-        $html .= '<table style="width: 100%;">'."\n";
+        $html .= '<table style="width: 100%; border-collapse: collapse;">'."\n";
         $html .= "<tbody>\n";
         $html .= "<tr>\n";
         $html .= '<td style="width: 50px;"><strong>Číslo</strong></td>'."\n";
@@ -291,17 +291,26 @@ class PsCombExport extends Module
 
         foreach ($rows as $r) {
             $isOutOfStock = (isset($r['quantity']) && $r['quantity'] <= 0);
-            $cellStyle = $isOutOfStock ? ' style="text-decoration:line-through; color:#999"' : '';
-
-            $html .= "<tr>\n";
-            $html .= '<td'.$cellStyle.'>'.htmlspecialchars((string)$r['cislo'])."</td>\n";
-            $html .= '<td'.$cellStyle.'>'.htmlspecialchars((string)$r['nazev'])."</td>\n";
-            $html .= '<td'.$cellStyle.'>'.htmlspecialchars((string)$r['den'])."</td>\n";
-            $html .= '<td'.$cellStyle.'>&nbsp;'.htmlspecialchars((string)$r['oddo'])."</td>\n";
-            $html .= '<td'.$cellStyle.'>&nbsp;</td>'."\n";
+            // Apply style to TR for row-wide effect (visuals depend on client support)
+            // We also add background to make it distinct.
+            $rowStyle = $isOutOfStock ? ' style="text-decoration:line-through; color:#999; background-color:#f9f9f9;"' : '';
+            
+            // For cells, we might need to reinforce text-decoration if TR doesn't inherit in some contexts,
+            // but user specifically asked to avoid "individual columns" look. 
+            // Let's trust TR style + background.
+            
+            $html .= "<tr{$rowStyle}>\n";
+            $html .= '<td>'.htmlspecialchars((string)$r['cislo'])."</td>\n";
+            $html .= '<td>'.htmlspecialchars((string)$r['nazev'])."</td>\n";
+            $html .= '<td>'.htmlspecialchars((string)$r['den'])."</td>\n";
+            $html .= '<td>&nbsp;'.htmlspecialchars((string)$r['oddo'])."</td>\n";
+            $html .= '<td>&nbsp;</td>'."\n";
 
             if ($isOutOfStock) {
-                $html .= '<td'.$cellStyle.'><img src="'.htmlspecialchars($imgPath).'" alt="checkout" width="24" height="24" style="opacity:0.5; filter:grayscale(100%)" /> '.
+                // Image: grayscale and opacity. 
+                // Note: text-decoration:line-through on TR usually strikes through text in TD.
+                // We keep the image style.
+                $html .= '<td><img src="'.htmlspecialchars($imgPath).'" alt="checkout" width="24" height="24" style="opacity:0.5; filter:grayscale(100%)" /> '.
                           htmlspecialchars($btnLabel)."</td>\n";
             } else {
                 $html .= '<td><a href="'.htmlspecialchars($r['link']).'"><img src="'.
@@ -309,7 +318,7 @@ class PsCombExport extends Module
                           htmlspecialchars($btnLabel)."</a></td>\n";
             }
 
-            $html .= '<td'.$cellStyle.'>&nbsp;</td>'."\n";
+            $html .= '<td>&nbsp;</td>'."\n";
             $html .= "</tr>\n";
         }
 
