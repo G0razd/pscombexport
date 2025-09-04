@@ -36,12 +36,13 @@ class PsCombExportEmbedModuleFrontController extends ModuleFrontController
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kurzy</title>
 <style>
-    body { font-family: "Open Sans", sans-serif; margin: 0; padding: 0; background: transparent; }
+    body { font-family: "Open Sans", sans-serif; margin: 0; padding: 0; background: transparent; overflow: hidden; }
     /* Ensure table styles from module are respected, add basic reset */
     table { width: 100%; border-collapse: collapse; }
     td { padding: 8px; border-bottom: 1px solid #eee; vertical-align: middle; }
-    h2 { font-size: 18px; margin: 15px 0 10px; color: #333; }
-    a { text-decoration: none; color: inherit; }
+    h2 { font-size: 24px; margin: 15px 0 15px; color: #333; }
+    a { text-decoration: none; color: #2fb5d2; font-weight: bold; }
+    a:hover { text-decoration: underline; }
     img { vertical-align: middle; }
 </style>
 </head>
