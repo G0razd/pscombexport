@@ -7,7 +7,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '3.0'; // embed endpoint
+        $this->version = '3.1'; // embed button in product page
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -21,7 +21,9 @@ class PsCombExport extends Module
 
     public function install()
     {
-        return parent::install() && $this->registerHook('moduleRoutes');
+        return parent::install() 
+            && $this->registerHook('moduleRoutes')
+            && $this->registerHook('displayAdminProductsMainStepRightColumnBottom');
     }
 
     public function uninstall() { return parent::uninstall(); }
@@ -42,6 +44,32 @@ class PsCombExport extends Module
                 ],
             ],
         ];
+    }
+
+    public function hookDisplayAdminProductsMainStepRightColumnBottom($params)
+    {
+        $id_product = (int)$params['id_product'];
+        if (!$id_product) {
+            return '';
+        }
+        
+        $prod = new Product($id_product, false, $this->context->language->id);
+        $rewrite = $prod->link_rewrite;
+        $embedUrl = $this->context->link->getModuleLink('pscombexport', 'embed', ['id_product' => $id_product, 'rewrite' => $rewrite]);
+        $iframeCode = '<iframe src="'.$embedUrl.'" width="100%" height="800" frameborder="0" style="border:0; overflow:hidden;" scrolling="no"></iframe>';
+
+        $html = '<div class="col-md-12">';
+        $html .= '<h3>'.$this->l('Kurzy Embed Code').'</h3>';
+        $html .= '<div class="input-group">';
+        $html .= '<input type="text" class="form-control" id="embedUrlInputProduct" value="'.htmlspecialchars($iframeCode).'" readonly>';
+        $html .= '<div class="input-group-append">';
+        $html .= '<button class="btn btn-primary" type="button" onclick="document.getElementById(\'embedUrlInputProduct\').select();document.execCommand(\'copy\');"><i class="material-icons">content_copy</i> '.$this->l('Copy').'</button>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<p class="help-block text-muted small">'.$this->l('Copy this code to embed the table.').'</p>';
+        $html .= '</div>';
+
+        return $html;
     }
 
     public function getContent()
