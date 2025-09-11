@@ -1,151 +1,106 @@
 # PsCombExport - PrestaShop Module
 
-PrestaShop modul pro export kombinací produktů do HTML tabulky s pokročilým zpracováním termínů kurzů.
+[🇨🇿 Česká verze (Czech Version)](README.cs.md)
+
+PrestaShop module for exporting product combinations into an HTML table with advanced course term handling.
 
 ## Features
 
-- Export kombinací jednoho produktu do HTML tabulky
-- Automatické seskupení podle termínů kurzu (Začátek kurzu)
-- Podpora vícedenních kurzů (PO+ČT, ÚT+ST, atd.)
-- Normalizace času (Od-Do formát HH:MM - HH:MM)
-- SEO optimalizované HTML s `<h2>` nadpisy pro každý termín
-- Podpora českých názvů měsíců (nominativ i genitiv)
-- Preview s absolutními URL obrázků
-- Export s relativními URL pro přenositelnost
+- Export combinations of a single product to an HTML table.
+- **Embed Support (v3.0+):** Generate iframe embed codes for external sites.
+- **Active Products List (v3.3+):** View all active products categorized by default category with quick "Copy Embed" buttons.
+- Automatic grouping by course terms (Course Start).
+- Support for multi-day courses (Mon+Thu, Tue+Wed, etc.).
+- Time normalization (From-To format HH:MM - HH:MM).
+- SEO optimized HTML with `<h2>` headings for each term.
+- Support for Czech month names (nominative and genitive).
+- Preview with absolute image URLs.
+- Export with relative URLs for portability.
+- **Stock Handling:** Visual strikethrough for out-of-stock items.
 
-## Instalace
+## Installation
 
-1. Stáhněte nejnovější verzi z [Releases](../../releases)
-2. Přihlaste se do administrace PrestaShop
-3. Přejděte na **Moduly → Module Manager**
-4. Klikněte na **Nahrát modul**
-5. Vyberte stažený ZIP soubor `pscombexport-vX.X.zip`
-6. Klikněte na **Nahrát tento modul**
-7. Po nahrání klikněte na **Konfigurovat**
+1. Download the latest version from [Releases](../../releases).
+2. Log in to PrestaShop administration.
+3. Go to **Modules → Module Manager**.
+4. Click **Upload a module**.
+5. Select the downloaded ZIP file `pscombexport-vX.X.zip`.
+6. Click **Upload this module**.
+7. After uploading, click **Configure**.
 
-Podrobný návod: [INSTALL.md](INSTALL.md)  
-Česká dokumentace: [DOKUMENTACE.md](DOKUMENTACE.md)  
-Řešení problémů: [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+Detailed instructions: [INSTALL.md](INSTALL.md) (Czech)  
+Documentation: [DOKUMENTACE.md](DOKUMENTACE.md) (Czech)  
+Troubleshooting: [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Czech)
 
-## Použití
+## Usage
 
-1. V konfiguraci modulu vyberte produkt
-2. Nastavte URL obrázku tlačítka a text
-3. Vyberte, zda chcete přidat prázdný řádek na konci
-4. Klikněte na **Generate table**
-5. Zkopírujte vygenerovaný HTML kód z textového pole
+### Generator Tab
+1. Select a product in the module configuration.
+2. Set the button image URL and label.
+3. Choose whether to add an empty row at the end.
+4. Click **Generate table**.
+5. Copy the generated HTML code or the Embed URL/Iframe code.
 
-## Podporované atributy
+### Active Products List Tab
+1. Switch to the "Active Products List" tab.
+2. Browse products categorized by their default category.
+3. Click the **Copy Embed** button to instantly get the iframe code.
 
-Modul očekává následující skupiny atributů (podle slug/name):
+### Product Page
+1. Go to **Catalog → Products**.
+2. Open any product.
+3. Scroll to the bottom of the "Basic settings" tab (or check the "Pscombexport" tab).
+4. Copy the Embed Code from the provided block.
 
-- **Den**: `den` (podporuje formáty: PO, pondělí, po+čt, po/st, atd.)
-- **Od-Do**: `od_do`, `oddo`, `cas` (podporuje formáty: 15:00-16:35, 1500_1635, atd.)
-- **Začátek kurzu**: `zacatek_kurzu`, `zacatek`, `start_kurzu` (podporuje formáty: 29. září 2025, 29_zari_2025, 29_září_2025, atd.)
+## Supported Attributes
 
-### Podporované formáty měsíců
+The module expects the following attribute groups (by slug/name):
 
-**Nominativ:** leden, únor, březen, duben, květen, červen, červenec, srpen, září, říjen, listopad, prosinec  
-**Genitiv:** ledna, února, března, dubna, května, června, července, srpna, září, října, listopadu, prosince
+- **Day**: `den` (supports formats: PO, pondělí, po+čt, po/st, etc.)
+- **From-To**: `od_do`, `oddo`, `cas` (supports formats: 15:00-16:35, 1500_1635, etc.)
+- **Course Start**: `zacatek_kurzu`, `zacatek`, `start_kurzu` (supports formats: 29. září 2025, 29_zari_2025, etc.)
 
-## Struktura projektu
+### Supported Month Formats (Czech)
+
+**Nominative:** leden, únor, březen, duben, květen, červen, červenec, srpen, září, říjen, listopad, prosinec  
+**Genitive:** ledna, února, března, dubna, května, června, července, srpna, září, října, listopadu, prosince
+
+## Project Structure
 
 ```
 pscombexport/
-├── pscombexport.php      # Hlavní soubor modulu
-├── index.php             # Bezpečnostní soubor
-├── build.ps1             # Build skript pro Windows
-├── build.sh              # Build skript pro Linux/Mac
-├── README.md             # Tento soubor
-├── INSTALL.md            # Instalační návod
-├── DOKUMENTACE.md        # Česká dokumentace
-├── CHANGELOG.md          # Historie změn
-├── .gitignore            # Git ignore soubory
+├── pscombexport.php      # Main module file
+├── index.php             # Security file
+├── build.js              # Node.js build script
+├── README.md             # This file (English)
+├── README.cs.md          # Czech README
+├── INSTALL.md            # Installation instructions
+├── DOKUMENTACE.md        # Documentation
+├── CHANGELOG.md          # Changelog
 └── .github/
     └── workflows/
         └── release.yml   # GitHub Actions workflow
 ```
 
-## Vývoj
+## Development
 
 ### Build
 
-Pro vytvoření release balíčku použijte:
+To create a release package, use:
 
-**Windows (PowerShell):**
-```powershell
-.\build.ps1
-```
-
-**Linux/Mac:**
+**Node.js:**
 ```bash
-chmod +x build.sh
-./build.sh
+node build.js
 ```
 
-Balíček bude vytvořen v adresáři `release/`.
+The package will be created in the `release/` directory.
 
 ### GitHub Actions
 
-Projekt obsahuje automatizovaný workflow pro vytváření release balíčků:
+The project includes an automated workflow for creating release packages:
 
-#### Automatický release při vytvoření tagu:
+#### Automatic release on tag creation:
 ```bash
-git tag v2.2
-git push origin v2.2
+git tag v3.3
+git push origin v3.3
 ```
-
-#### Manuální build přes GitHub Actions:
-1. Jděte na záložku **Actions**
-2. Vyberte **Build and Release**
-3. Klikněte **Run workflow**
-4. Zadejte verzi (např. 2.2)
-
-### Přidání loga modulu (volitelné)
-
-Pokud chcete přidat logo pro modul v PrestaShop:
-
-1. Vytvořte obrázek `logo.png` (doporučené rozměry: 57x57 px nebo 114x114 px)
-2. Umístěte ho do kořenového adresáře modulu
-3. Aktualizujte `build.ps1` a `build.sh` pro zahrnutí loga do balíčku
-
-## Verze
-
-**Aktuální verze: 2.2**
-
-### Changelog
-
-**2.2** (2025-10-13)
-- ✅ Přidána podpora genitivních tvarů měsíců (ledna, února, atd.)
-- ✅ Vylepšené build skripty pro Windows a Linux
-- ✅ Přidán GitHub Actions workflow pro automatické release
-- ✅ Kompletní dokumentace (EN + CZ)
-
-**2.1**
-- ✅ Podpora vícedenních kurzů
-- ✅ Robustní zpracování českých názvů měsíců
-- ✅ SEO optimalizace s `<h2>` nadpisy
-
-Úplný changelog: [CHANGELOG.md](CHANGELOG.md)
-
-## Kompatibilita
-
-- **PrestaShop:** 1.7.0.0 - 8.x
-- **PHP:** 7.1+
-- **Bootstrap:** 3.x (PrestaShop Admin)
-
-## Licence
-
-MIT License
-
-## Autor
-
-Lukáš Gorazd Hrodek
-
-## Podpora
-
-Pro nahlášení chyb nebo požadavků na nové funkce použijte [Issues](../../issues).
-
----
-
-**Vytvořeno s ❤️ pro PrestaShop komunitu**
