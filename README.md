@@ -11,7 +11,7 @@
 ---
 
 ###  Languages / Jazyky
-[ **Èeská dokumentace (Czech Documentation)**](README.cs.md)
+[ **ï¿½eskï¿½ dokumentace (Czech Documentation)**](README.cs.md)
 
 ---
 
@@ -22,7 +22,7 @@
 *   ** Embed Anywhere (v3.0+):** Generate clean, responsive `<iframe>` codes to display course schedules on external websites (WordPress, landing pages, etc.).
 *   ** Active Products Dashboard (v3.3+):** A dedicated tab listing all active products with one-click "Copy Embed" buttons.
 *   ** Stock Management:** Visual strikethrough and disabled buttons for out-of-stock items.
-*   ** Smart Date Parsing:** Handles complex inputs like "PO+ÈT" (Mon+Thu) or "15:00-16:30".
+*   ** Smart Date Parsing:** Handles complex inputs like "PO+ï¿½T" (Mon+Thu) or "15:00-16:30".
 *   ** Czech Localization:** Native support for Czech month declension (nominative/genitive).
 
 ##  Installation
@@ -59,9 +59,9 @@ The module relies on specific attribute group codes (slugs) to function correctl
 
 | Attribute Type | Recommended Slugs | Example Values |
 | :--- | :--- | :--- |
-| **Day** | `den` | `PO`, `Pondìlí`, `PO+ÈT` |
+| **Day** | `den` | `PO`, `Pondï¿½lï¿½`, `PO+ï¿½T` |
 | **Time (From-To)** | `od_do`, `oddo`, `cas` | `15:00-16:30`, `1500_1630` |
-| **Start Date** | `zacatek_kurzu`, `start_kurzu` | `29. záøí 2025`, `29_zari_2025` |
+| **Start Date** | `zacatek_kurzu`, `start_kurzu` | `29. zï¿½ï¿½ï¿½ 2025`, `29_zari_2025` |
 
 ##  Contributing & Support
 
