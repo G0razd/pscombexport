@@ -1,6 +1,6 @@
-#  PsCombExport for PrestaShop
+# Product Combinations Export plugin for PrestaShop
 
-[![Version](https://img.shields.io/badge/version-3.3-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.4-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![PrestaShop](https://img.shields.io/badge/PrestaShop-1.7%2B-F35372.svg)](https://www.prestashop.com/)
 [![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/lukasgorazdhrodek)
@@ -11,7 +11,7 @@
 ---
 
 ###  Languages / Jazyky
-[ **�esk� dokumentace (Czech Documentation)**](README.cs.md)
+[ **Česká dokumentace (Czech Documentation)**](README.cs.md)
 
 ---
 

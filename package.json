@@ -1,7 +1,7 @@
 {
 	"name": "pscombexport",
-	"version": "2.4.0",
-	"description": "PrestaShop module for combinations export",
+	"version": "3.4.0",
+	"description": "Product Combinations Export plugin for PrestaShop",
 	"main": "pscombexport.php",
 	"scripts": {
 		"build": "node build.js"

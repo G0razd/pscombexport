@@ -14,7 +14,7 @@ class PsCombExport extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('Combinations Export (Single Product HTML Table)');
+        $this->displayName = $this->l('Product Combinations Export plugin for PrestaShop');
         $this->description = $this->l('Generate a copy-ready HTML table for one product: Číslo / Název / Den / Od-Do + Začátky kurzu (grouped by term); preview absolute image, export relative; robust combined-day handling and proper admin token.');
         $this->ps_versions_compliancy = ['min' => '1.7.0.0', 'max' => _PS_VERSION_];
     }
