@@ -4,15 +4,23 @@ on:
   push:
     tags:
       - "v*"
+    branches:
+      - main
+    paths:
+      - "pscombexport.php"
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -22,19 +30,40 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Extract Version
+        id: get_version
+        run: |
+          VERSION=$(grep '$this->version' pscombexport.php | sed -E "s/.*= *['\"]([^'\"]+)['\"].*/\1/")
+          echo "Detected version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if Tag Exists
+        id: check_tag
+        run: |
+          if git rev-parse "v${{ steps.get_version.outputs.VERSION }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.get_version.outputs.VERSION }} already exists."
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag v${{ steps.get_version.outputs.VERSION }} does not exist."
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build Release Package
+        if: steps.check_tag.outputs.exists == 'false'
         run: node build.js
 
       - name: Upload artifact
+        if: steps.check_tag.outputs.exists == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: pscombexport-release
           path: release/*.zip
 
       - name: Create Release
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        if: steps.check_tag.outputs.exists == 'false'
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: v${{ steps.get_version.outputs.VERSION }}
           files: release/*.zip
           generate_release_notes: true
           draft: false
