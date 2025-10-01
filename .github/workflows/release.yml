@@ -37,30 +37,16 @@ jobs:
           echo "Detected version: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Check if Tag Exists
-        id: check_tag
-        run: |
-          if git rev-parse "v${{ steps.get_version.outputs.VERSION }}" >/dev/null 2>&1; then
-            echo "Tag v${{ steps.get_version.outputs.VERSION }} already exists."
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "Tag v${{ steps.get_version.outputs.VERSION }} does not exist."
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Build Release Package
-        if: steps.check_tag.outputs.exists == 'false'
         run: node build.js
 
       - name: Upload artifact
-        if: steps.check_tag.outputs.exists == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: pscombexport-release
           path: release/*.zip
 
       - name: Create Release
-        if: steps.check_tag.outputs.exists == 'false'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.get_version.outputs.VERSION }}
@@ -68,5 +54,8 @@ jobs:
           generate_release_notes: true
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
+          allow_updates: true
+          replace_artifacts: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
