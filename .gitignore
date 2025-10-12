@@ -1,0 +1,18 @@
+# Release builds
+release/
+temp_build/
+*.zip
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
