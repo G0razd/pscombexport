@@ -20,9 +20,9 @@ trait PsCombExportUI
             $html .= '<div class="col-lg-1">';
             $html .= '<span class="switch prestashop-switch fixed-width-lg">';
             $html .= '<input type="radio" name="columns['.$key.'][active]" id="col_'.$key.'_on" value="1" '.($col['active'] ? 'checked="checked"' : '').'>';
-            $html .= '<label for="col_'.$key.'_on">Yes</label>';
+            $html .= '<label for="col_'.$key.'_on">'.$this->l('Yes').'</label>';
             $html .= '<input type="radio" name="columns['.$key.'][active]" id="col_'.$key.'_off" value="0" '.(!$col['active'] ? 'checked="checked"' : '').'>';
-            $html .= '<label for="col_'.$key.'_off">No</label>';
+            $html .= '<label for="col_'.$key.'_off">'.$this->l('No').'</label>';
             $html .= '<a class="slide-button btn"></a>';
             $html .= '</span>';
             $html .= '</div>';
