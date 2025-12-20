@@ -47,15 +47,13 @@ jobs:
           path: release/*.zip
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: v${{ steps.get_version.outputs.VERSION }}
-          files: release/*.zip
-          generate_release_notes: true
+          tag: v${{ steps.get_version.outputs.VERSION }}
+          artifacts: release/*.zip
+          generateReleaseNotes: true
           draft: false
           prerelease: false
-          fail_on_unmatched_files: false
-          allow_updates: true
-          replace_artifacts: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          removeArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
