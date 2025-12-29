@@ -7,7 +7,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '3.1'; // embed button in product page
+        $this->version = '3.2'; // auto-hook registration
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -23,7 +23,8 @@ class PsCombExport extends Module
     {
         return parent::install() 
             && $this->registerHook('moduleRoutes')
-            && $this->registerHook('displayAdminProductsMainStepRightColumnBottom');
+            && $this->registerHook('displayAdminProductsMainStepRightColumnBottom')
+            && $this->registerHook('displayAdminProductsExtra');
     }
 
     public function uninstall() { return parent::uninstall(); }
@@ -48,6 +49,16 @@ class PsCombExport extends Module
 
     public function hookDisplayAdminProductsMainStepRightColumnBottom($params)
     {
+        return $this->renderEmbedBlock($params);
+    }
+
+    public function hookDisplayAdminProductsExtra($params)
+    {
+        return $this->renderEmbedBlock($params);
+    }
+
+    private function renderEmbedBlock($params)
+    {
         $id_product = (int)$params['id_product'];
         if (!$id_product) {
             return '';
@@ -61,9 +72,9 @@ class PsCombExport extends Module
         $html = '<div class="col-md-12">';
         $html .= '<h3>'.$this->l('Kurzy Embed Code').'</h3>';
         $html .= '<div class="input-group">';
-        $html .= '<input type="text" class="form-control" id="embedUrlInputProduct" value="'.htmlspecialchars($iframeCode).'" readonly>';
+        $html .= '<input type="text" class="form-control" id="embedUrlInputProduct'.rand().'" value="'.htmlspecialchars($iframeCode).'" readonly>';
         $html .= '<div class="input-group-append">';
-        $html .= '<button class="btn btn-primary" type="button" onclick="document.getElementById(\'embedUrlInputProduct\').select();document.execCommand(\'copy\');"><i class="material-icons">content_copy</i> '.$this->l('Copy').'</button>';
+        $html .= '<button class="btn btn-primary" type="button" onclick="this.parentElement.previousElementSibling.select();document.execCommand(\'copy\');"><i class="material-icons">content_copy</i> '.$this->l('Copy').'</button>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '<p class="help-block text-muted small">'.$this->l('Copy this code to embed the table.').'</p>';
@@ -74,6 +85,10 @@ class PsCombExport extends Module
 
     public function getContent()
     {
+        // Auto-register hooks for updates (self-healing)
+        $this->registerHook('displayAdminProductsMainStepRightColumnBottom');
+        $this->registerHook('displayAdminProductsExtra');
+
         $ctx     = Context::getContext();
         $idShop  = (int)$ctx->shop->id;
         $idLang  = (int)Tools::getValue('id_lang', (int)Configuration::get('PS_LANG_DEFAULT'));
