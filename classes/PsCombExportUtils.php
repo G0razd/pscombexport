@@ -130,18 +130,18 @@ trait PsCombExportUtils
     private function dayTokenToDisplay($t)
     {
         switch ($t) {
-            case 'po': return $this->l('Mon');
-            case 'ut': return $this->l('Tue');
-            case 'st': return $this->l('Wed');
-            case 'ct': return $this->l('Thu');
-            case 'pa': return $this->l('Fri');
-            case 'so': return $this->l('Sat');
-            case 'ne': return $this->l('Sun');
+            case 'po': return 'PO';
+            case 'ut': return 'ÚT';
+            case 'st': return 'ST';
+            case 'ct': return 'ČT';
+            case 'pa': return 'PÁ';
+            case 'so': return 'SO';
+            case 'ne': return 'NE';
         }
         $two = Tools::strtoupper(Tools::substr($t, 0, 2));
-        if ($two === 'UT') return $this->l('Tue');
-        if ($two === 'CT') return $this->l('Thu');
-        if ($two === 'PA') return $this->l('Fri');
+        if ($two === 'UT') return 'ÚT';
+        if ($two === 'CT') return 'ČT';
+        if ($two === 'PA') return 'PÁ';
         return $two;
     }
 
@@ -150,19 +150,19 @@ trait PsCombExportUtils
     {
         $slug = $this->slugSimple($value);
         $map = [
-            'po'=>$this->l('Mon'),'pondeli'=>$this->l('Mon'),
-            'ut'=>$this->l('Tue'),'utery'=>$this->l('Tue'),'uteri'=>$this->l('Tue'),
-            'st'=>$this->l('Wed'),'streda'=>$this->l('Wed'),
-            'ct'=>$this->l('Thu'),'ctvrtek'=>$this->l('Thu'),
-            'pa'=>$this->l('Fri'),'patek'=>$this->l('Fri'),
-            'so'=>$this->l('Sat'),'sobota'=>$this->l('Sat'),
-            'ne'=>$this->l('Sun'),'nedele'=>$this->l('Sun'),'neděle'=>$this->l('Sun')
+            'po'=>'PO','pondeli'=>'PO',
+            'ut'=>'ÚT','utery'=>'ÚT','uteri'=>'ÚT',
+            'st'=>'ST','streda'=>'ST',
+            'ct'=>'ČT','ctvrtek'=>'ČT',
+            'pa'=>'PÁ','patek'=>'PÁ',
+            'so'=>'SO','sobota'=>'SO',
+            'ne'=>'NE','nedele'=>'NE','neděle'=>'NE'
         ];
         if (isset($map[$slug])) return $map[$slug];
         $two = Tools::strtoupper(Tools::substr($value, 0, 2));
-        if     ($two === 'UT') return $this->l('Tue');
-        elseif ($two === 'CT') return $this->l('Thu');
-        elseif ($two === 'PA') return $this->l('Fri');
+        if     ($two === 'UT') return 'ÚT';
+        elseif ($two === 'CT') return 'ČT';
+        elseif ($two === 'PA') return 'PÁ';
         return $two;
     }
 

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.5.3] - 2025-12-29
 ### Fixed
 - Iframe embed links now properly redirect the parent window (`target="_top"`).
+- Reverted day name localization in table content to keep original format (PO, ÚT, etc.).
 
 ## [3.5.2] - 2025-12-01
 ### Fixed
