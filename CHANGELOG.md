@@ -5,6 +5,10 @@ All notable changes to the PsCombExport PrestaShop module will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.4] - 2025-12-29
+### Changed
+- Default column labels and section headings are now in Czech (Číslo, Název, Den, Čas, Objednat, Začátek kurzu).
+
 ## [3.5.3] - 2025-12-29
 ### Fixed
 - Iframe embed links now properly redirect the parent window (`target="_top"`).

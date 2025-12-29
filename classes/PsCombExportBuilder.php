@@ -102,7 +102,7 @@ trait PsCombExportBuilder
         foreach ($starts as $key => $bucket) {
             $disp = trim($bucket['disp']);
             $sectionIndex++;
-            $heading = $disp !== '' ? $this->l('Course Start: ').$disp : $this->l('Date not found');
+            $heading = $disp !== '' ? 'Začátek kurzu: '.$disp : 'Datum nenalezeno';
 
             $exportHtml  .= $this->sectionTable($heading, $bucket['rows'], $exportImgPath, $btnLabel, false, $sectionIndex, $addEmptyRow, $config);
             $previewHtml .= $this->sectionTable($heading, $bucket['rows'], $previewImgPath, $btnLabel, true,  $sectionIndex, $addEmptyRow, $config);

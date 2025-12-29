@@ -7,12 +7,12 @@ trait PsCombExportUtils
     {
         $default = [
             'columns' => [
-                'cislo' => ['active' => 1, 'label' => $this->l('Number')],
-                'nazev' => ['active' => 1, 'label' => $this->l('Name')],
-                'den' => ['active' => 1, 'label' => $this->l('Day')],
-                'oddo' => ['active' => 1, 'label' => $this->l('Time')],
+                'cislo' => ['active' => 1, 'label' => 'Číslo'],
+                'nazev' => ['active' => 1, 'label' => 'Název'],
+                'den' => ['active' => 1, 'label' => 'Den'],
+                'oddo' => ['active' => 1, 'label' => 'Čas'],
                 'spacer' => ['active' => 1, 'label' => ''],
-                'buy' => ['active' => 1, 'label' => $this->l('Buy')],
+                'buy' => ['active' => 1, 'label' => 'Objednat'],
             ],
             'styles' => [
                 'header_bg' => '#ffffff',
