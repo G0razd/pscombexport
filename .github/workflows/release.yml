@@ -41,7 +41,6 @@ jobs:
           # Copy module files
           cp pscombexport.php temp_build/$MODULE_NAME/
           cp index.php temp_build/$MODULE_NAME/
-          cp logo.png temp_build/$MODULE_NAME/
 
           # Create ZIP package
           cd temp_build
