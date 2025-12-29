@@ -15,7 +15,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '3.5.1'; // customization settings
+        $this->version = '3.5.2'; // customization settings
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -23,7 +23,7 @@ class PsCombExport extends Module
         parent::__construct();
 
         $this->displayName = $this->l('Product Combinations Export plugin for PrestaShop');
-        $this->description = $this->l('Generate a copy-ready HTML table for one product: Číslo / Název / Den / Od-Do + Začátky kurzu (grouped by term); preview absolute image, export relative; robust combined-day handling and proper admin token.');
+        $this->description = $this->l('Generate a copy-ready HTML table for one product: Number / Name / Day / Time + Course Starts (grouped by term); preview absolute image, export relative; robust combined-day handling and proper admin token.');
         $this->ps_versions_compliancy = ['min' => '1.7.0.0', 'max' => _PS_VERSION_];
     }
 
