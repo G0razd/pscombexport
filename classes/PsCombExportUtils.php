@@ -7,12 +7,12 @@ trait PsCombExportUtils
     {
         $default = [
             'columns' => [
-                'cislo' => ['active' => 1, 'label' => 'Číslo'],
-                'nazev' => ['active' => 1, 'label' => 'Název'],
-                'den' => ['active' => 1, 'label' => 'Den'],
-                'oddo' => ['active' => 1, 'label' => 'Od-Do'],
+                'cislo' => ['active' => 1, 'label' => $this->l('Number')],
+                'nazev' => ['active' => 1, 'label' => $this->l('Name')],
+                'den' => ['active' => 1, 'label' => $this->l('Day')],
+                'oddo' => ['active' => 1, 'label' => $this->l('Time')],
                 'spacer' => ['active' => 1, 'label' => ''],
-                'buy' => ['active' => 1, 'label' => 'KOUPIT'],
+                'buy' => ['active' => 1, 'label' => $this->l('Buy')],
             ],
             'styles' => [
                 'header_bg' => '#ffffff',
@@ -130,18 +130,18 @@ trait PsCombExportUtils
     private function dayTokenToDisplay($t)
     {
         switch ($t) {
-            case 'po': return 'PO';
-            case 'ut': return 'ÚT';
-            case 'st': return 'ST';
-            case 'ct': return 'ČT';
-            case 'pa': return 'PÁ';
-            case 'so': return 'SO';
-            case 'ne': return 'NE';
+            case 'po': return $this->l('Mon');
+            case 'ut': return $this->l('Tue');
+            case 'st': return $this->l('Wed');
+            case 'ct': return $this->l('Thu');
+            case 'pa': return $this->l('Fri');
+            case 'so': return $this->l('Sat');
+            case 'ne': return $this->l('Sun');
         }
         $two = Tools::strtoupper(Tools::substr($t, 0, 2));
-        if ($two === 'UT') return 'ÚT';
-        if ($two === 'CT') return 'ČT';
-        if ($two === 'PA') return 'PÁ';
+        if ($two === 'UT') return $this->l('Tue');
+        if ($two === 'CT') return $this->l('Thu');
+        if ($two === 'PA') return $this->l('Fri');
         return $two;
     }
 
@@ -150,19 +150,19 @@ trait PsCombExportUtils
     {
         $slug = $this->slugSimple($value);
         $map = [
-            'po'=>'PO','pondeli'=>'PO',
-            'ut'=>'ÚT','utery'=>'ÚT','uteri'=>'ÚT',
-            'st'=>'ST','streda'=>'ST',
-            'ct'=>'ČT','ctvrtek'=>'ČT',
-            'pa'=>'PÁ','patek'=>'PÁ',
-            'so'=>'SO','sobota'=>'SO',
-            'ne'=>'NE','nedele'=>'NE','neděle'=>'NE'
+            'po'=>$this->l('Mon'),'pondeli'=>$this->l('Mon'),
+            'ut'=>$this->l('Tue'),'utery'=>$this->l('Tue'),'uteri'=>$this->l('Tue'),
+            'st'=>$this->l('Wed'),'streda'=>$this->l('Wed'),
+            'ct'=>$this->l('Thu'),'ctvrtek'=>$this->l('Thu'),
+            'pa'=>$this->l('Fri'),'patek'=>$this->l('Fri'),
+            'so'=>$this->l('Sat'),'sobota'=>$this->l('Sat'),
+            'ne'=>$this->l('Sun'),'nedele'=>$this->l('Sun'),'neděle'=>$this->l('Sun')
         ];
         if (isset($map[$slug])) return $map[$slug];
         $two = Tools::strtoupper(Tools::substr($value, 0, 2));
-        if     ($two === 'UT') return 'ÚT';
-        elseif ($two === 'CT') return 'ČT';
-        elseif ($two === 'PA') return 'PÁ';
+        if     ($two === 'UT') return $this->l('Tue');
+        elseif ($two === 'CT') return $this->l('Thu');
+        elseif ($two === 'PA') return $this->l('Fri');
         return $two;
     }
 
@@ -302,13 +302,13 @@ trait PsCombExportUtils
     private function dayOrderSingle($abbr)
     {
         $map = [
-            'PO'=>1,
-            'ÚT'=>2, 'UT'=>2,
-            'ST'=>3,
-            'ČT'=>4, 'CT'=>4,
-            'PÁ'=>5, 'PA'=>5,
-            'SO'=>6,
-            'NE'=>7
+            'PO'=>1, 'MON'=>1,
+            'ÚT'=>2, 'UT'=>2, 'TUE'=>2,
+            'ST'=>3, 'WED'=>3,
+            'ČT'=>4, 'CT'=>4, 'THU'=>4,
+            'PÁ'=>5, 'PA'=>5, 'FRI'=>5,
+            'SO'=>6, 'SAT'=>6,
+            'NE'=>7, 'SUN'=>7
         ];
         $u = Tools::strtoupper($abbr);
         if (isset($map[$u])) return (int)$map[$u];
