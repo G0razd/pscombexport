@@ -7,7 +7,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '3.2'; // auto-hook registration
+        $this->version = '3.3'; // active products list tab
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -99,7 +99,17 @@ class PsCombExport extends Module
         $btnLabel    = Tools::getValue('btn_label', 'OBJEDNAT');
         $addEmptyRow = (bool)Tools::getValue('add_empty_row', false);
 
-        $html = '<div class="panel">';
+        // Tabs Header
+        $html = '<ul class="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#tab_generator" role="tab" data-toggle="tab">'.$this->l('Generator').'</a></li>
+                    <li><a href="#tab_list" role="tab" data-toggle="tab">'.$this->l('Active Products List').'</a></li>
+                 </ul>';
+
+        $html .= '<div class="tab-content">';
+
+        // TAB 1: Generator
+        $html .= '<div class="tab-pane active" id="tab_generator">';
+        $html .= '<div class="panel" style="border-top:0">';
         $html .= '<h3><i class="icon icon-table"></i> '.$this->l('Single product → HTML table').'</h3>';
         $html .= $this->renderSingleProductForm($idLang, $productId, $btnImg, $btnLabel, $addEmptyRow);
 
@@ -109,12 +119,81 @@ class PsCombExport extends Module
             );
             $html .= $this->renderPreviewAndTextarea($previewHtml, $exportHtml, $startsDisplay, $productId, $idLang);
         }
+        $html .= '</div>'; // end panel
+        $html .= '</div>'; // end tab_generator
 
+        // TAB 2: Active Products List
+        $html .= '<div class="tab-pane" id="tab_list">';
+        $html .= '<div class="panel" style="border-top:0">';
+        $html .= '<h3><i class="icon icon-list"></i> '.$this->l('All Active Products').'</h3>';
+        $html .= $this->renderActiveProductsList($idLang);
         $html .= '</div>';
+        $html .= '</div>'; // end tab_list
+
+        $html .= '</div>'; // end tab-content
+
         return $html;
     }
 
     /* ========================== UI ========================== */
+
+    private function renderActiveProductsList($idLang)
+    {
+        $db = Db::getInstance();
+        $products = $db->executeS('
+            SELECT p.id_product, pl.name, cl.name as category_name, pl.link_rewrite
+            FROM '._DB_PREFIX_.'product p
+            INNER JOIN '._DB_PREFIX_.'product_lang pl
+                ON pl.id_product = p.id_product AND pl.id_lang = '.(int)$idLang.'
+            LEFT JOIN '._DB_PREFIX_.'category_lang cl
+                ON cl.id_category = p.id_category_default AND cl.id_lang = '.(int)$idLang.'
+            WHERE p.active = 1
+            ORDER BY cl.name ASC, pl.name ASC
+        ');
+
+        if (!$products) {
+            return '<div class="alert alert-info">'.$this->l('No active products found.').'</div>';
+        }
+
+        $grouped = [];
+        foreach ($products as $p) {
+            $cat = $p['category_name'] ?: $this->l('Uncategorized');
+            $grouped[$cat][] = $p;
+        }
+
+        $html = '';
+        foreach ($grouped as $category => $items) {
+            $html .= '<h4 style="margin-top:20px; border-bottom:1px solid #eee; padding-bottom:5px;">'.htmlspecialchars($category).'</h4>';
+            $html .= '<table class="table table-striped table-hover">';
+            $html .= '<thead><tr>
+                        <th width="50">ID</th>
+                        <th>'.$this->l('Name').'</th>
+                        <th width="150" class="text-right">'.$this->l('Action').'</th>
+                      </tr></thead>';
+            $html .= '<tbody>';
+            
+            foreach ($items as $p) {
+                $embedUrl = $this->context->link->getModuleLink('pscombexport', 'embed', ['id_product' => $p['id_product'], 'rewrite' => $p['link_rewrite']]);
+                $iframeCode = '<iframe src="'.$embedUrl.'" width="100%" height="800" frameborder="0" style="border:0; overflow:hidden;" scrolling="no"></iframe>';
+                $inputId = 'embed_code_'.$p['id_product'];
+
+                $html .= '<tr>';
+                $html .= '<td>'.(int)$p['id_product'].'</td>';
+                $html .= '<td><a href="'.$this->context->link->getAdminLink('AdminProducts', true, ['id_product' => $p['id_product'], 'updateproduct' => 1]).'" target="_blank">'.htmlspecialchars($p['name']).'</a></td>';
+                $html .= '<td class="text-right">';
+                // Hidden input for copy
+                $html .= '<input type="text" id="'.$inputId.'" value="'.htmlspecialchars($iframeCode).'" style="position:absolute; left:-9999px;">';
+                $html .= '<button class="btn btn-default btn-sm" onclick="document.getElementById(\''.$inputId.'\').select();document.execCommand(\'copy\'); $(this).find(\'i\').text(\'check\'); setTimeout(()=>{$(this).find(\'i\').text(\'content_copy\')}, 2000);">';
+                $html .= '<i class="material-icons" style="font-size:16px; vertical-align:middle;">content_copy</i> '.$this->l('Copy Embed');
+                $html .= '</button>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $html .= '</tbody></table>';
+        }
+
+        return $html;
+    }
 
     private function renderSingleProductForm($idLang, $productId, $btnImg, $btnLabel, $addEmptyRow)
     {
@@ -124,6 +203,7 @@ class PsCombExport extends Module
             FROM '._DB_PREFIX_.'product p
             INNER JOIN '._DB_PREFIX_.'product_lang pl
                 ON pl.id_product = p.id_product AND pl.id_lang = '.(int)$idLang.'
+            WHERE p.active = 1
             ORDER BY pl.name ASC
             LIMIT 1000
         ');
