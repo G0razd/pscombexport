@@ -7,7 +7,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '2.6'; // stock handling (row-based strikethrough)
+        $this->version = '3.0'; // embed endpoint
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -19,8 +19,30 @@ class PsCombExport extends Module
         $this->ps_versions_compliancy = ['min' => '1.7.0.0', 'max' => _PS_VERSION_];
     }
 
-    public function install() { return parent::install(); }
+    public function install()
+    {
+        return parent::install() && $this->registerHook('moduleRoutes');
+    }
+
     public function uninstall() { return parent::uninstall(); }
+
+    public function hookModuleRoutes($params)
+    {
+        return [
+            'module-pscombexport-embed' => [
+                'controller' => 'embed',
+                'rule' => 'kurzy-embed/{id_product}-{rewrite}',
+                'keywords' => [
+                    'id_product' => ['regexp' => '[0-9]+', 'param' => 'id_product'],
+                    'rewrite' => ['regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'rewrite'],
+                ],
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'pscombexport',
+                ],
+            ],
+        ];
+    }
 
     public function getContent()
     {
@@ -42,7 +64,7 @@ class PsCombExport extends Module
             list($startsDisplay, $exportHtml, $previewHtml) = $this->buildSingleProductTables(
                 $productId, $idShop, $idLang, $btnImg, $btnLabel, $addEmptyRow
             );
-            $html .= $this->renderPreviewAndTextarea($previewHtml, $exportHtml, $startsDisplay);
+            $html .= $this->renderPreviewAndTextarea($previewHtml, $exportHtml, $startsDisplay, $productId, $idLang);
         }
 
         $html .= '</div>';
@@ -140,10 +162,26 @@ class PsCombExport extends Module
         return $html;
     }
 
-    private function renderPreviewAndTextarea($previewHtml, $exportHtml, $startsDisplay)
+    private function renderPreviewAndTextarea($previewHtml, $exportHtml, $startsDisplay, $productId = 0, $idLang = 0)
     {
         $html  = '<h4 style="margin-top:25px">'.$this->l('Preview (absolute image URL)').'</h4>';
         $html .= '<div style="border:1px solid #eee; padding:12px; max-height:45vh; overflow:auto; background:#fff">'.$previewHtml.'</div>';
+
+        if ($productId > 0 && $idLang > 0) {
+            $prod = new Product($productId, false, $idLang);
+            $rewrite = $prod->link_rewrite;
+            // Force front office link generation
+            $embedUrl = $this->context->link->getModuleLink('pscombexport', 'embed', ['id_product' => $productId, 'rewrite' => $rewrite]);
+            
+            $html .= '<h4 style="margin-top:20px">'.$this->l('Embed URL (v3.0)').'</h4>';
+            $html .= '<div class="input-group">';
+            $html .= '<input type="text" class="form-control" id="embedUrlInput" value="'.htmlspecialchars($embedUrl).'" readonly>';
+            $html .= '<span class="input-group-btn">';
+            $html .= '<button class="btn btn-default" type="button" onclick="document.getElementById(\'embedUrlInput\').select();document.execCommand(\'copy\');"><i class="icon-copy"></i> '.$this->l('Copy').'</button>';
+            $html .= '</span>';
+            $html .= '</div>';
+            $html .= '<p class="help-block">'.$this->l('Use this URL to embed the table via iframe or fetch.').'</p>';
+        }
 
         $html .= '<h4 style="margin-top:20px">'.$this->l('Copy this HTML (relative /images/... for SEO & portability)').'</h4>';
         $html .= '<textarea class="form-control" rows="20" onclick="this.select()">'.htmlspecialchars($exportHtml).'</textarea>';
@@ -156,7 +194,7 @@ class PsCombExport extends Module
 
     /* ====================== TABLE BUILDING ====================== */
 
-    private function buildSingleProductTables($productId, $idShop, $idLang, $btnImg, $btnLabel, $addEmptyRow)
+    public function buildSingleProductTables($productId, $idShop, $idLang, $btnImg, $btnLabel, $addEmptyRow)
     {
         $ctx  = Context::getContext();
         $link = $ctx->link;
