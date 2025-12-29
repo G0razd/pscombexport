@@ -172,15 +172,16 @@ class PsCombExport extends Module
             $rewrite = $prod->link_rewrite;
             // Force front office link generation
             $embedUrl = $this->context->link->getModuleLink('pscombexport', 'embed', ['id_product' => $productId, 'rewrite' => $rewrite]);
+            $iframeCode = '<iframe src="'.$embedUrl.'" width="100%" height="800" frameborder="0" style="border:0; overflow:hidden;" scrolling="no"></iframe>';
             
-            $html .= '<h4 style="margin-top:20px">'.$this->l('Embed URL (v3.0)').'</h4>';
+            $html .= '<h4 style="margin-top:20px">'.$this->l('Embed Code (Iframe)').'</h4>';
             $html .= '<div class="input-group">';
-            $html .= '<input type="text" class="form-control" id="embedUrlInput" value="'.htmlspecialchars($embedUrl).'" readonly>';
+            $html .= '<input type="text" class="form-control" id="embedUrlInput" value="'.htmlspecialchars($iframeCode).'" readonly>';
             $html .= '<span class="input-group-btn">';
             $html .= '<button class="btn btn-default" type="button" onclick="document.getElementById(\'embedUrlInput\').select();document.execCommand(\'copy\');"><i class="icon-copy"></i> '.$this->l('Copy').'</button>';
             $html .= '</span>';
             $html .= '</div>';
-            $html .= '<p class="help-block">'.$this->l('Use this URL to embed the table via iframe or fetch.').'</p>';
+            $html .= '<p class="help-block">'.$this->l('Copy this code to embed the table. Adjust height="800" if needed.').'</p>';
         }
 
         $html .= '<h4 style="margin-top:20px">'.$this->l('Copy this HTML (relative /images/... for SEO & portability)').'</h4>';
