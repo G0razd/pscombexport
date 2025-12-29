@@ -5,72 +5,66 @@ All notable changes to the PsCombExport PrestaShop module will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.2] - 2025-10-13
-
-### Added
-- Support for genitive month forms (ledna, února, března, etc.)
-- Build scripts for Windows (PowerShell) and Linux (Bash)
-- GitHub Actions workflow for automated release creation
-- Comprehensive documentation (README.md, INSTALL.md, DOKUMENTACE.md)
-- `.gitignore` file for clean repository
-- `index.php` security file (PrestaShop requirement)
-
-### Changed
-- Improved month name detection to handle both nominative and genitive cases
-- Updated `czMonthGenitive()` method to map genitive forms
-- Updated `czMonthNumber()` method to recognize genitive forms
-- Enhanced build process with proper file structure
-
+## [3.5.3] - 2025-12-29
 ### Fixed
-- Date parsing now works with genitive month names (e.g., "29_ledna_2025")
-- PowerShell build script syntax errors resolved
+- Iframe embed links now properly redirect the parent window (`target="_top"`).
 
-## [2.1] - 2024-XX-XX
-
-### Added
-- Multi-day course support (PO+ČT, ÚT+ST combinations)
-- Robust Czech month name handling
-- SEO optimization with `<h2>` section headings per term
-- Proper admin token handling for CSRF protection
-
-### Changed
-- Improved day sequence comparison algorithm
-- Enhanced time range normalization
-- Better handling of combined day formats
-
+## [3.5.2] - 2025-12-01
 ### Fixed
-- CSRF token validation in admin forms
-- Day ordering for multi-day courses
-- Time format parsing edge cases
+- Switched to `ncipollo/release-action` to support `allowUpdates` and `removeArtifacts` in CI/CD.
+- Updated module description.
 
-## [2.0] - 2024-XX-XX
-
+## [3.5.1] - 2025-11-10
 ### Added
-- Single product export functionality
-- HTML table generation with preview and export modes
-- Course term grouping by start date
-- Automatic sorting by date, day, and time
-- Configurable button image and label
-- Optional empty row at table end
+- Pre-commit hook to enforce version bumping on file changes.
+- Improved localization by wrapping hardcoded strings in `l()` and using English defaults.
 
+## [3.5.0] - 2025-10-01
+### Refactored
+- Split main class into traits for better maintainability.
+- Fixed GitHub Action and README encoding.
+
+## [3.4.0] - 2025-09-13
+### Added
+- Auto-update check from GitHub.
+- CI: Auto-release when version in `pscombexport.php` changes.
 ### Changed
-- Complete rewrite from previous version
-- Modern PrestaShop 1.7+ compatibility
-- Bootstrap-based admin UI
+- Updated module name to 'Product Combinations Export plugin for PrestaShop'.
+- Refined README.md with badges, Ko-fi button, and debloated structure.
+- Added English README, renamed Czech README, setup translations structure.
 
-## [1.0] - Initial Release
-
+## [3.3.0] - 2025-09-08
 ### Added
-- Basic combination export functionality
-- Simple HTML table generation
+- Active Products List tab with categorized tables and copy embed buttons.
+- Ko-fi username to FUNDING.yml.
+### Changed
+- Updated GitHub Action to use Node.js build script.
 
----
+## [3.2.0] - 2025-09-06
+### Added
+- Auto-register hooks.
+- Fallback tab for product page embed code.
 
-## Legend
+## [3.1.0] - 2025-09-05
+### Added
+- Embed code copy button to product administration page.
 
-- **Added**: New features
-- **Changed**: Changes in existing functionality
-- **Deprecated**: Soon-to-be removed features
-- **Removed**: Removed features
-- **Fixed**: Bug fixes
-- **Security**: Security vulnerability fixes
+## [3.0.0] - 2025-09-03
+### Added
+- Embed endpoint with logical slug structure and copy button.
+### Changed
+- Refined embed styles (blue links, bigger title) and iframe code generation.
+
+## [2.6.0] - 2025-09-02
+### Changed
+- Improved stock handling visuals (row-based strikethrough).
+
+## [2.5.0] - 2025-09-01
+### Added
+- Stock handling with cell-based strikethrough.
+
+## [1.0.0] - 2025-08-25
+### Added
+- Initial release.
+- Module creation.
+- Fix: update months genitiv.

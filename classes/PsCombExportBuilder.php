@@ -191,7 +191,8 @@ trait PsCombExportBuilder
                             $html .= '<td><img src="'.htmlspecialchars($imgPath).'" alt="checkout" width="24" height="24" style="opacity:0.5; filter:grayscale(100%)" /> '.
                                       htmlspecialchars($btnLabel)."</td>\n";
                         } else {
-                            $html .= '<td><a href="'.htmlspecialchars($r['link']).'"><img src="'.
+                            $target = $isPreview ? ' target="_top"' : '';
+                            $html .= '<td><a href="'.htmlspecialchars($r['link']).'"'.$target.'><img src="'.
                                       htmlspecialchars($imgPath).'" alt="checkout" width="24" height="24" />'.
                                       htmlspecialchars($btnLabel)."</a></td>\n";
                         }
