@@ -63,7 +63,6 @@ async function build() {
     "LICENSE",
     "README.md",
     "README.cs.md",
-    "README_MODULE.md",
     "CHANGELOG.md",
     "INSTALL.md",
     "DOKUMENTACE.md",
