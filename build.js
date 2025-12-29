@@ -62,6 +62,7 @@ async function build() {
     "logo.png",
     "LICENSE",
     "README.md",
+    "README.cs.md",
     "README_MODULE.md",
     "CHANGELOG.md",
     "INSTALL.md",
