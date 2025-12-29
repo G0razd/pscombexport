@@ -10,6 +10,21 @@ trait PsCombExportUI
 
         $html = '<form method="post" action="'.$action.'" class="form-horizontal">';
         
+        // Grouping Section
+        $html .= '<h4>'.$this->l('Grouping Configuration').'</h4>';
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-lg-2">'.$this->l('Grouping Attribute Name').'</label>';
+        $html .= '<div class="col-lg-3"><input type="text" name="grouping[attr_name]" value="'.htmlspecialchars($config['grouping']['attr_name']).'" class="form-control" placeholder="zacatek_kurzu"></div>';
+        $html .= '<p class="help-block col-lg-offset-2 col-lg-10">'.$this->l('The internal name (slug) of the attribute used to group products (e.g. "zacatek_kurzu").').'</p>';
+        $html .= '</div>';
+
+        $html .= '<div class="form-group">';
+        $html .= '<label class="control-label col-lg-2">'.$this->l('Grouping Title Prefix').'</label>';
+        $html .= '<div class="col-lg-3"><input type="text" name="grouping[title]" value="'.htmlspecialchars($config['grouping']['title']).'" class="form-control" placeholder="Začátek kurzu: "></div>';
+        $html .= '</div>';
+
+        $html .= '<hr>';
+
         // Columns Section
         $html .= '<h4>'.$this->l('Columns Configuration').'</h4>';
         $html .= '<p class="help-block">'.$this->l('Enable/Disable columns and rename headers.').'</p>';

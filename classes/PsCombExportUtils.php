@@ -20,6 +20,10 @@ trait PsCombExportUtils
                 'row_bg' => '#ffffff',
                 'oos_bg' => '#f9f9f9',
                 'oos_text' => '#999999',
+            ],
+            'grouping' => [
+                'attr_name' => 'zacatek_kurzu',
+                'title' => 'Začátek kurzu: ',
             ]
         ];
 
@@ -51,7 +55,15 @@ trait PsCombExportUtils
     }
     private function isStartGroup($groupSlug)
     {
-        return in_array($groupSlug, ['zacatek_kurzu','zacatek','start_kurzu','startkurzu'], true);
+        $config = $this->getConfig();
+        $customAttr = isset($config['grouping']['attr_name']) ? $this->slugSimple($config['grouping']['attr_name']) : '';
+        
+        $defaults = ['zacatek_kurzu','zacatek','start_kurzu','startkurzu'];
+        if ($customAttr && !in_array($customAttr, $defaults)) {
+            $defaults[] = $customAttr;
+        }
+        
+        return in_array($groupSlug, $defaults, true);
     }
 
     /** Convert a day string (diacritics and separators "+", "/", ",") into display like "PO+ČT". */

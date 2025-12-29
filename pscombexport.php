@@ -15,7 +15,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '3.5.4'; // customization settings
+        $this->version = '3.5.5'; // customization settings
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -107,7 +107,8 @@ class PsCombExport extends Module
         if (Tools::isSubmit('submit_settings')) {
             $config = [
                 'columns' => Tools::getValue('columns'),
-                'styles' => Tools::getValue('styles')
+                'styles' => Tools::getValue('styles'),
+                'grouping' => Tools::getValue('grouping'),
             ];
             Configuration::updateValue('PSCOMBEXPORT_CONFIG', json_encode($config));
             $this->context->controller->confirmations[] = $this->l('Settings updated');
