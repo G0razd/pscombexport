@@ -7,7 +7,7 @@ class PsCombExport extends Module
     {
         $this->name = 'pscombexport';
         $this->tab = 'administration';
-        $this->version = '3.3'; // active products list tab
+        $this->version = '3.4'; // auto-update from github
         $this->author = 'Lukáš Gorazd Hrodek';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -24,7 +24,8 @@ class PsCombExport extends Module
         return parent::install() 
             && $this->registerHook('moduleRoutes')
             && $this->registerHook('displayAdminProductsMainStepRightColumnBottom')
-            && $this->registerHook('displayAdminProductsExtra');
+            && $this->registerHook('displayAdminProductsExtra')
+            && $this->registerHook('actionAdminControllerSetMedia');
     }
 
     public function uninstall() { return parent::uninstall(); }
@@ -55,6 +56,11 @@ class PsCombExport extends Module
     public function hookDisplayAdminProductsExtra($params)
     {
         return $this->renderEmbedBlock($params);
+    }
+
+    public function hookActionAdminControllerSetMedia()
+    {
+        // Optional: Add CSS/JS for admin if needed
     }
 
     private function renderEmbedBlock($params)
@@ -103,6 +109,7 @@ class PsCombExport extends Module
         $html = '<ul class="nav nav-tabs" role="tablist">
                     <li class="active"><a href="#tab_generator" role="tab" data-toggle="tab">'.$this->l('Generator').'</a></li>
                     <li><a href="#tab_list" role="tab" data-toggle="tab">'.$this->l('Active Products List').'</a></li>
+                    <li><a href="#tab_update" role="tab" data-toggle="tab">'.$this->l('Update').'</a></li>
                  </ul>';
 
         $html .= '<div class="tab-content">';
@@ -130,12 +137,78 @@ class PsCombExport extends Module
         $html .= '</div>';
         $html .= '</div>'; // end tab_list
 
+        // TAB 3: Update
+        $html .= '<div class="tab-pane" id="tab_update">';
+        $html .= '<div class="panel" style="border-top:0">';
+        $html .= '<h3><i class="icon icon-refresh"></i> '.$this->l('Module Update').'</h3>';
+        $html .= $this->renderUpdateTab();
+        $html .= '</div>';
+        $html .= '</div>'; // end tab_update
+
         $html .= '</div>'; // end tab-content
 
         return $html;
     }
 
     /* ========================== UI ========================== */
+
+    private function renderUpdateTab()
+    {
+        $repoOwner = 'G0razd';
+        $repoName = 'pscombexport';
+        $apiUrl = "https://api.github.com/repos/$repoOwner/$repoName/releases/latest";
+        
+        // Simple caching to avoid hitting API limits too often
+        $cacheId = 'pscombexport_update_check';
+        $latestRelease = false;
+        
+        // In a real scenario, use PrestaShop Cache or a file. 
+        // For now, we fetch live but suppress errors.
+        $ctx = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'header' => [
+                    'User-Agent: PrestaShop-Module-PsCombExport'
+                ]
+            ]
+        ]);
+
+        $json = @Tools::file_get_contents($apiUrl, false, $ctx);
+        if ($json) {
+            $data = json_decode($json, true);
+            if (isset($data['tag_name'])) {
+                $latestRelease = $data;
+            }
+        }
+
+        $html = '';
+        if ($latestRelease) {
+            $latestVersion = ltrim($latestRelease['tag_name'], 'v');
+            $currentVersion = $this->version;
+
+            if (version_compare($latestVersion, $currentVersion, '>')) {
+                $html .= '<div class="alert alert-warning">';
+                $html .= '<h4>'.$this->l('New version available!').'</h4>';
+                $html .= '<p>'.$this->l('Current version:').' <strong>'.$currentVersion.'</strong></p>';
+                $html .= '<p>'.$this->l('Latest version:').' <strong>'.$latestVersion.'</strong></p>';
+                $html .= '<p>'.$this->l('Release notes:').' <br>'.nl2br(htmlspecialchars($latestRelease['body'])).'</p>';
+                $html .= '<br>';
+                $html .= '<a href="'.$latestRelease['html_url'].'" target="_blank" class="btn btn-primary"><i class="icon-download"></i> '.$this->l('Download from GitHub').'</a>';
+                $html .= '</div>';
+            } else {
+                $html .= '<div class="alert alert-success">';
+                $html .= '<i class="icon-check"></i> '.$this->l('You are using the latest version.').' (v'.$currentVersion.')';
+                $html .= '</div>';
+            }
+        } else {
+            $html .= '<div class="alert alert-info">';
+            $html .= $this->l('Could not check for updates. Please check manually on GitHub.');
+            $html .= ' <a href="https://github.com/'.$repoOwner.'/'.$repoName.'/releases" target="_blank" class="alert-link">'.$this->l('Go to Releases').'</a>';
+            $html .= '</div>';
+        }
+
+        return $html;
+    }
 
     private function renderActiveProductsList($idLang)
     {
